@@ -1,0 +1,124 @@
+{
+    "paths": {
+        "/ocs/v2.php/apps/zammadapiticketsubmission/api/tickets": {
+            "post": {
+                "operationId": "zammad-create-ticket",
+                "summary": "Create a Zammad Ticket via server proxy",
+                "tags": [
+                    "tickets"
+                ],
+                "security": [
+                    {
+                        "bearer_auth": []
+                    },
+                    {
+                        "basic_auth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "OCS-APIRequest",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "boolean",
+                            "default": true
+                        },
+                        "description": "Must be true for OCS endpoints"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TicketCreate"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Ticket created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "ocs": {
+                                            "type": "object",
+                                            "properties": {
+                                                "meta": {
+                                                    "$ref": "#/components/schemas/OCSMeta"
+                                                },
+                                                "data": {
+                                                    "$ref": "#/components/schemas/TicketCreated"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "TicketCreate": {
+                "type": "object",
+                "required": [
+                    "subject",
+                    "body",
+                    "customer"
+                ],
+                "properties": {
+                    "subject": {
+                        "type": "string"
+                    },
+                    "body": {
+                        "type": "string"
+                    },
+                    "customer": {
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "priority": {
+                        "type": "string",
+                        "enum": [
+                            "1",
+                            "2",
+                            "3"
+                        ],
+                        "default": "2"
+                    },
+                    "tags": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "TicketCreated": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "number": {
+                        "type": "integer"
+                    },
+                    "state_id": {
+                        "type": "integer"
+                    },
+                    "priority_id": {
+                        "type": "integer"
+                    }
+                }
+            }
+        }
+    }
+}
