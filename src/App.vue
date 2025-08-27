@@ -1,6 +1,7 @@
 <template>
   <div class="p-6">
-    <h1 class="app-title">{{ t('zammadapiticketsubmission', 'Submit a Zammad Ticket') }}</h1>
+    <!-- Page heading says Help -->
+    <h1 class="app-title">{{ t('zammadapiticketsubmission', 'Help') }}</h1>
 
     <form @submit.prevent="submitTicket" class="ticket-form">
       <div class="field">
@@ -72,7 +73,7 @@ export default {
         const resp = await fetch(OC.generateUrl('/ocs/v2.php/apps/zammadapiticketsubmission/api/tickets'), {
           method: 'POST',
           headers: {
-            'OCS-APIRequest': 'true',
+            'OCS-APIRequest': 'true',    // required for CSRF bypass
             'Content-Type': 'application/json'
           },
           body: JSON.stringify(this.form),
@@ -85,17 +86,22 @@ export default {
         }
 
         const data = await resp.json()
-        // Expecting { ocs: { data: { id, number, ... } } }
         const ticket = data?.ocs?.data
-        this.successMsg = this.t('zammadapiticketsubmission', 'Ticket created successfully') + (ticket?.number ? ` (#${ticket.number})` : '')
-        this.form.subject = ''
-        this.form.body = ''
-        this.form.customer = ''
-        this.form.priority = '2'
-        this.form.tags = []
+        this.successMsg = this.t('zammadapiticketsubmission', 'Ticket created successfully') +
+          (ticket?.number ? ` (#${ticket.number})` : '')
+
+        // Reset form
+        this.form = {
+          subject: '',
+          body: '',
+          customer: '',
+          priority: '2',
+          tags: []
+        }
       } catch (e) {
         console.error(e)
-        this.errorMsg = this.t('zammadapiticketsubmission', 'Failed to create ticket') + ': ' + (e?.message || e)
+        this.errorMsg = this.t('zammadapiticketsubmission', 'Failed to create ticket') +
+          ': ' + (e?.message || e)
       } finally {
         this.submitting = false
       }
