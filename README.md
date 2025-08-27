@@ -1,4 +1,4 @@
-# Zammad A P I Ticket Submission
+# Zammad API Ticket Submission
 
 ## Zammad Integration
 
