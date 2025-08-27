@@ -1,6 +1,8 @@
 <?php
-script($_['appId'], 'main'); // makes sure the script is enqueued if needed
+// Ensures the JS entry is enqueued if not already
+script($_['appId'], 'main');
 ?>
-<div id="zammad-help" class="section">
-	<!-- Vue mounts here -->
+<div class="section">
+  <h1 class="page-heading">Help</h1> <!-- <- the text under the nav bar -->
+  <div id="zammad-help"></div>       <!-- <- Vue mounts here -->
 </div>
