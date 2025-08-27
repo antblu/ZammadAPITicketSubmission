@@ -4,18 +4,16 @@ import vue from '@vitejs/plugin-vue'
 
 export default defineConfig({
   plugins: [vue()],
-
-  // We want Nextcloud to load js/main.js via Util::addScript($app, 'main')
   build: {
-    outDir: 'js',          // <-- puts the build in apps/<id>/js/
-    emptyOutDir: true,     // cleans the js/ folder before building
-    assetsDir: '',         // keep assets flat inside js/
+    outDir: 'js',           // put build into apps/<id>/js/
+    emptyOutDir: true,
+    assetsDir: '',          // keep files flat under js/
     rollupOptions: {
-      input: 'src/main.js',
+      input: 'src/main.js', // your entry file
       output: {
-        entryFileNames: 'main.js',     // <-- js/main.js
+        entryFileNames: 'main.js',        // => js/main.js
         chunkFileNames: '[name].js',
-        assetFileNames: '[name][extname]', // css -> js/style.css unless you also addStyle()
+        assetFileNames: '[name][extname]' // e.g. js/style.css if CSS emitted
       }
     }
   }
