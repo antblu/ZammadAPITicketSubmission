@@ -5,7 +5,7 @@
   <name>ZammadAPITicket</name> <!-- <- app name -->
   <summary>Allows Zammad Tickets to be submitted directly from the App Navigation Bar</summary>
   <description><![CDATA[Submit Zammad tickets from Nextcloud using a token.]]></description>
-  <version>1.0.1</version>
+  <version>1.0.2</version>
   <licence>agpl</licence>
   <author mail="anthony.bluemel@vectordigital.io">Anthony Bluemel</author>
   <namespace>ZammadAPITicketSubmission</namespace>
