@@ -18,7 +18,7 @@
       <id>zammadapiticketsubmission</id>
       <name>Help</name> <!-- <- sidebar label -->
       <route>zammadapiticketsubmission.page.index</route>
-      <icon>app.svg</icon>
+      <icon>img/app.svg</icon>
       <type>link</type>
     </navigation>
   </navigations>
