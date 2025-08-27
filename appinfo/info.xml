@@ -3,6 +3,7 @@
 	  xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
 	<id>zammadapiticketsubmission</id>
 	<name>Help</name>
+	<route>zammadapiticketsubmission.page.index</route>
 	<summary>Allows Zammad Tickets to be submitted directly from the App Navigation Bar</summary>
 	<description><![CDATA[App for Nextcloud that calls on Zammad's REST API to submit tickets directly to Zammad through Nextcloud. Requires authentication through an API token.]]></description>
 	<version>1.0.0</version>
