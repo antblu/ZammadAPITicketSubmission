@@ -3,8 +3,7 @@ import App from './App.vue'
 
 Vue.config.productionTip = false
 
-// i18n helpers provided by Nextcloud global (t, n)
+// Make Nextcloud i18n helpers available
 Vue.mixin({ methods: { t, n } })
 
-const View = Vue.extend(App)
-new View().$mount('#zammadapiticketsubmission')
+new (Vue.extend(App))().$mount('#zammad-help')
