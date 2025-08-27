@@ -6,14 +6,14 @@ export default defineConfig({
   plugins: [vue()],
   build: {
     outDir: 'js',           // put build into apps/<id>/js/
-    emptyOutDir: true,
-    assetsDir: '',          // keep files flat under js/
+    emptyOutDir: true,      // clean js/ before building
+    assetsDir: '',          // keep assets flat inside js/
     rollupOptions: {
-      input: 'src/main.js', // your entry file
+      input: 'src/main.js', // your actual entry
       output: {
         entryFileNames: 'main.js',        // => js/main.js
         chunkFileNames: '[name].js',
-        assetFileNames: '[name][extname]' // e.g. js/style.css if CSS emitted
+        assetFileNames: '[name][extname]'
       }
     }
   }
