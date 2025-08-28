@@ -1,17 +1,17 @@
 // vite.config.js
 import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
+import vue from '@vitejs/plugin-vue2'  // ⬅️ Vue 2 plugin
 
 export default defineConfig({
   plugins: [vue()],
   build: {
-    outDir: 'js',           // put build into apps/<id>/js/
-    emptyOutDir: true,      // clean js/ before building
-    assetsDir: '',          // keep assets flat inside js/
+    outDir: 'js',           // Nextcloud expects apps/<id>/js/
+    emptyOutDir: true,
+    assetsDir: '',
     rollupOptions: {
-      input: 'src/main.js', // your actual entry
+      input: 'src/main.js',
       output: {
-        entryFileNames: 'main.js',        // => js/main.js
+        entryFileNames: 'main.js',
         chunkFileNames: '[name].js',
         assetFileNames: '[name][extname]'
       }
