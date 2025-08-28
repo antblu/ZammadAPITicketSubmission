@@ -1,6 +1,6 @@
 <?php
 /** @var array $_ */
-script($_['appId'], 'main'); // ensures js/main.js is loaded
+script('zammadapiticketsubmission', 'main'); // ensures js/main.js is loaded
 // If you also have a style bundle: style($_['appId'], 'style');
 ?>
 <div class="section">
