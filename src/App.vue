@@ -1,7 +1,6 @@
 <template>
   <div class="p-6">
-    <!-- Page heading says Help -->
-    <h1 class="app-title">{{ t('zammadapiticketsubmission', 'Help') }}</h1>
+    <h2 class="app-title">{{ t('zammadapiticketsubmission', 'Submit a Zammad Ticket') }}</h2>
 
     <form @submit.prevent="submitTicket" class="ticket-form">
       <div class="field">
@@ -29,26 +28,20 @@
       </div>
 
       <div class="actions">
-        <button type="submit" :disabled="submitting">
+        <button type="submit" class="primary" :disabled="submitting">
           {{ submitting ? t('zammadapiticketsubmission', 'Submitting…') : t('zammadapiticketsubmission', 'Create Ticket') }}
         </button>
-        <span v-if="successMsg" class="success">{{ successMsg }}</span>
-        <span v-if="errorMsg" class="error">{{ errorMsg }}</span>
+
+        <span v-if="successMsg" class="success" role="status">{{ successMsg }}</span>
+        <span v-if="errorMsg" class="error" role="alert">{{ errorMsg }}</span>
       </div>
     </form>
-
-    <hr class="divider" />
-
-    <DashboardWidget />
   </div>
 </template>
 
 <script>
-import DashboardWidget from './widget/DashboardWidget.vue'
-
 export default {
   name: 'ZammadApiTicketSubmissionApp',
-  components: { DashboardWidget },
   data () {
     return {
       submitting: false,
@@ -70,10 +63,11 @@ export default {
       this.errorMsg = ''
 
       try {
-        const resp = await fetch(OC.generateUrl('/ocs/v2.php/apps/zammadapiticketsubmission/api/tickets'), {
+        const url = OC.generateUrl('/ocs/v2.php/apps/zammadapiticketsubmission/api/tickets')
+        const resp = await fetch(url, {
           method: 'POST',
           headers: {
-            'OCS-APIRequest': 'true',    // required for CSRF bypass
+            'OCS-APIRequest': 'true',
             'Content-Type': 'application/json'
           },
           body: JSON.stringify(this.form),
@@ -81,27 +75,27 @@ export default {
         })
 
         if (!resp.ok) {
-          const txt = await resp.text()
-          throw new Error(`HTTP ${resp.status}: ${txt}`)
+          // OCS responses are JSON but include the envelope; if it fails, still show status
+          const txt = await resp.text().catch(() => '')
+          throw new Error(`HTTP ${resp.status}${txt ? `: ${txt}` : ''}`)
         }
 
         const data = await resp.json()
-        const ticket = data?.ocs?.data
-        this.successMsg = this.t('zammadapiticketsubmission', 'Ticket created successfully') +
-          (ticket?.number ? ` (#${ticket.number})` : '')
+        // Expect envelope: { ocs: { meta: {...}, data: {...ticket...} } }
+        const ticket = data && data.ocs && data.ocs.data ? data.ocs.data : null
 
-        // Reset form
-        this.form = {
-          subject: '',
-          body: '',
-          customer: '',
-          priority: '2',
-          tags: []
-        }
+        this.successMsg = this.t('zammadapiticketsubmission', 'Ticket created successfully') +
+          (ticket && ticket.number ? ` (#${ticket.number})` : '')
+
+        // Reset the form
+        this.form.subject = ''
+        this.form.body = ''
+        this.form.customer = ''
+        this.form.priority = '2'
+        this.form.tags = []
       } catch (e) {
         console.error(e)
-        this.errorMsg = this.t('zammadapiticketsubmission', 'Failed to create ticket') +
-          ': ' + (e?.message || e)
+        this.errorMsg = this.t('zammadapiticketsubmission', 'Failed to create ticket') + ': ' + (e && e.message ? e.message : e)
       } finally {
         this.submitting = false
       }
@@ -112,7 +106,7 @@ export default {
 
 <style scoped>
 .app-title {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   font-weight: 600;
   margin-bottom: 1rem;
 }
@@ -135,7 +129,7 @@ export default {
   align-items: center;
   gap: 0.75rem;
 }
-.actions button {
+.actions .primary {
   padding: 0.5rem 0.9rem;
   border: none;
   border-radius: 6px;
@@ -145,9 +139,4 @@ export default {
 }
 .success { color: var(--color-success); }
 .error { color: var(--color-error); }
-.divider {
-  margin: 2rem 0 1rem;
-  border: none;
-  border-top: 1px solid var(--color-border);
-}
 </style>
