@@ -14,9 +14,7 @@ class PageController extends Controller {
   }
 
   /** @NoAdminRequired @NoCSRFRequired */
-  public function index(): TemplateResponse {
-    // Load the built JS entry ("main" from vite.config.js)
-    Util::addScript($this->appName, 'main');
-    return new TemplateResponse($this->appName, 'main'); // templates/main.php
-  }
+public function index(): \OCP\AppFramework\Http\TemplateResponse {
+  \OCP\Util::addScript($this->appName, 'main'); // loads js/main.js
+  return new \OCP\AppFramework\Http\TemplateResponse($this->appName, 'main');
 }
